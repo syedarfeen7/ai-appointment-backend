@@ -1,3 +1,4 @@
+import { HTTPStausMessages } from "../../config/http.config";
 import { User } from "../../database";
 import { SignupDTO } from "./dtos";
 
@@ -6,7 +7,7 @@ export class AuthService {
     const { name, email, password } = data;
 
     const existing = await User.findOne({ email });
-    if (existing) throw new Error("Email already exists");
+    if (existing) throw new Error(HTTPStausMessages.ALREADY_EXISTS);
 
     const user = await User.create({
       name,
