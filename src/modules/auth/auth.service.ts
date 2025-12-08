@@ -1,5 +1,6 @@
 import { VerificationEnum } from "../../common/enums/verification-code.enum";
 import { fortyFiveMinutesFromNow } from "../../common/utils/date-time";
+import { sendMail } from "../../common/utils/mailer";
 import { config } from "../../config/env";
 import { HTTPStausMessages } from "../../config/http.config";
 import { User } from "../../database";
@@ -26,6 +27,16 @@ export class AuthService {
     });
 
     const verificationLink = `${config.APP_ORIGIN}/verify-email?code=${verificationCode.code}`;
+
+    const html = `
+    <h2>Welcome, ${name}</h2>
+    <p>Your account has been created successfully.</p>
+  `;
+    await sendMail({
+      to: user?.email,
+      subject: "Welcome to our platform",
+      html,
+    });
 
     // TODO: Send verification email
     console.log(

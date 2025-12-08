@@ -15,6 +15,11 @@ export const config = {
     REFRESH_SECRET: getEnv("JWT_REFRESH_SECRET"),
     REFRESH_EXPIRES_IN: getEnv("JWT_REFRESH_EXPIRES_IN", "30d"),
   },
-  MAILER_SENDER: getEnv("MAILER_SENDER"),
-  RESEND_API_KEY: getEnv("RESEND_API_KEY"),
+  MAILER: {
+    HOST: getEnv("SMTP_HOST"),
+    PORT: getEnvNumber("SMTP_PORT", 465),
+    USER: getEnv("SMTP_USER"),
+    PASS: getEnv("SMTP_PASS"),
+    SENDER: getEnv("MAILER_SENDER"),
+  },
 } as const;
