@@ -29,7 +29,7 @@ export class AuthService {
       )?.date,
     });
 
-    const verificationLink = `${config.APP_ORIGIN}/auth/verify-email?code=${verificationCode?.code}`;
+    const verificationLink = `${config.APP_ORIGIN}/auth/verify/email?code=${verificationCode?.code}`;
 
     const html = verificationEmailTemplate(name, verificationLink);
 
