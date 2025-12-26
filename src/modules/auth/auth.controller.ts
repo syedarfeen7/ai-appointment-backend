@@ -6,7 +6,11 @@ import {
   signupSchema,
 } from "../../common/validators/user.validator";
 import { HTTPStausCodes } from "../../config/http.config";
-import { setRefreshTokenCookie } from "../../common/utils/cookie.util";
+import {
+  clearRefreshTokenCookie,
+  setRefreshTokenCookie,
+} from "../../common/utils/cookie.util";
+import { verifyRefreshToken } from "../../common/utils/jwt.util";
 
 export class AuthController {
   private authService: AuthService;
@@ -64,5 +68,17 @@ export class AuthController {
       user,
       accessToken,
     });
+  });
+
+  public logout = asyncHandler(async (req: Request, res: Response) => {
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (refreshToken) {
+      const payload = verifyRefreshToken(refreshToken) as any;
+      await this.authService.logout(payload?.sessionId);
+    }
+
+    clearRefreshTokenCookie(res);
+    return res.status(HTTPStausCodes.OK).json({ message: "Logout successful" });
   });
 }

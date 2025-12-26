@@ -9,7 +9,7 @@ export const setRefreshTokenCookie = (res: Response, token: string) => {
     secure: isProd,
     sameSite: "strict",
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    path: "/api/auth",
+    path: "/api/v1/auth",
   });
 };
 
@@ -18,6 +18,6 @@ export const clearRefreshTokenCookie = (res: Response) => {
     httpOnly: true,
     secure: isProd,
     sameSite: "strict",
-    path: "/api/auth",
+    path: "/api/v1/auth",
   });
 };

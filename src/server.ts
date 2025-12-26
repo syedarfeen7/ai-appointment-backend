@@ -4,11 +4,13 @@ import { config } from "./config/env.config";
 import { HTTPStausCodes } from "./config/http.config";
 import { errorHandler } from "./common/middlewares/errorHandler";
 import authRoutes from "./modules/auth/auth.routes";
+import cookieParser from "cookie-parser";
 
 const app: Application = express();
 const BASE_PATH = config.BASE_PATH;
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(`${BASE_PATH}/auth`, authRoutes);
@@ -19,7 +21,7 @@ app.get("/health", (req: Request, res: Response) => {
 
 app.use(errorHandler);
 
-console.log(config.APP_ORIGIN)
+console.log(config.APP_ORIGIN);
 
 const startServer = async () => {
   try {

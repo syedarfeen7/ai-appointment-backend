@@ -106,4 +106,8 @@ export class AuthService {
       refreshToken,
     };
   }
+
+  public async logout(id: string) {
+    await SessionModel.deleteOne({ _id: id });
+  }
 }
