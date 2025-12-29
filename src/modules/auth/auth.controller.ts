@@ -6,7 +6,7 @@ import {
   resetPasswordSchema,
   signupSchema,
 } from "../../common/validators/user.validator";
-import { HTTPStausCodes } from "../../config/http.config";
+import { HTTPStatusCodes } from "../../config/http.config";
 import {
   clearRefreshTokenCookie,
   setRefreshTokenCookie,
@@ -26,25 +26,25 @@ export class AuthController {
 
     if (error) {
       return res
-        .status(HTTPStausCodes.BAD_REQUEST)
+        .status(HTTPStatusCodes.BAD_REQUEST)
         .json({ message: error.message });
     }
     const user = await this.authService.signup(req as any, data);
 
-    return res.status(HTTPStausCodes.CREATED).json({ user });
+    return res.status(HTTPStatusCodes.CREATED).json({ user });
   });
 
   public verifyEmail = asyncHandler(async (req: Request, res: Response) => {
     const { code } = req.query;
     if (!code || typeof code !== "string") {
       return res
-        .status(HTTPStausCodes.BAD_REQUEST)
+        .status(HTTPStatusCodes.BAD_REQUEST)
         .json({ message: "Verification code is required" });
     }
 
     await this.authService.verifyEmail(code);
     return res
-      .status(HTTPStausCodes.OK)
+      .status(HTTPStatusCodes.OK)
       .json({ message: "Email verified successfully" });
   });
 
@@ -56,7 +56,7 @@ export class AuthController {
 
     if (error) {
       return res
-        .status(HTTPStausCodes.BAD_REQUEST)
+        .status(HTTPStatusCodes.BAD_REQUEST)
         .json({ message: error.message });
     }
     const { user, accessToken, refreshToken } = await this.authService.login(
@@ -65,7 +65,7 @@ export class AuthController {
     );
 
     setRefreshTokenCookie(res, refreshToken);
-    return res.status(HTTPStausCodes.OK).json({
+    return res.status(HTTPStatusCodes.OK).json({
       message: "Login successful",
       user,
       accessToken,
@@ -76,13 +76,13 @@ export class AuthController {
 
     if (!email) {
       return res
-        .status(HTTPStausCodes.BAD_REQUEST)
+        .status(HTTPStatusCodes.BAD_REQUEST)
         .json({ message: "Email is required" });
     }
 
     await this.authService.forgotPassword(req as any, email);
     return res
-      .status(HTTPStausCodes.OK)
+      .status(HTTPStatusCodes.OK)
       .json({ message: "Password reset link sent" });
   });
 
@@ -92,20 +92,20 @@ export class AuthController {
 
     if (!token) {
       return res
-        .status(HTTPStausCodes.BAD_REQUEST)
+        .status(HTTPStatusCodes.BAD_REQUEST)
         .json({ message: "Reset token is required" });
     }
 
     const { error } = resetPasswordSchema.validate(data);
     if (error) {
       return res
-        .status(HTTPStausCodes.BAD_REQUEST)
+        .status(HTTPStatusCodes.BAD_REQUEST)
         .json({ message: error.message });
     }
 
     await this.authService.resetPassword(req as any, token, data);
 
-    return res.status(HTTPStausCodes.OK).json({
+    return res.status(HTTPStatusCodes.OK).json({
       message: "Password reset successful. Please login again.",
     });
   });
@@ -119,6 +119,6 @@ export class AuthController {
     }
 
     clearRefreshTokenCookie(res);
-    return res.status(HTTPStausCodes.OK).json({ message: "Logout successful" });
+    return res.status(HTTPStatusCodes.OK).json({ message: "Logout successful" });
   });
 }

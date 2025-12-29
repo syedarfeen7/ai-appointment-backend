@@ -1,7 +1,7 @@
 import { Response, NextFunction, Request } from "express";
 import { verifyAccessToken } from "../utils/jwt.util";
 import { SessionModel } from "../../database/models/session.model";
-import { HTTPStausCodes } from "../../config/http.config";
+import { HTTPStatusCodes } from "../../config/http.config";
 import { UserRole } from "../enums/user-role.enum";
 
 export const authMiddleware = async (
@@ -14,7 +14,7 @@ export const authMiddleware = async (
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res
-        .status(HTTPStausCodes.UNAUTHORIZED)
+        .status(HTTPStatusCodes.UNAUTHORIZED)
         .json({ message: "Unauthorized" });
     }
 
@@ -29,7 +29,7 @@ export const authMiddleware = async (
     const session = await SessionModel.findById(payload.sessionId);
     if (!session) {
       return res
-        .status(HTTPStausCodes.UNAUTHORIZED)
+        .status(HTTPStatusCodes.UNAUTHORIZED)
         .json({ message: "Session expired" });
     }
     req.user = {
@@ -41,7 +41,7 @@ export const authMiddleware = async (
     next();
   } catch (error) {
     return res
-      .status(HTTPStausCodes.UNAUTHORIZED)
+      .status(HTTPStatusCodes.UNAUTHORIZED)
       .json({ message: "Invalid or expired token" });
   }
 };

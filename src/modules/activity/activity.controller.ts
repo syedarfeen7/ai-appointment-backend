@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../../common/middlewares";
-import { HTTPStausCodes } from "../../config/http.config";
+import { HTTPStatusCodes } from "../../config/http.config";
 import { ActivityService } from "./activity.service";
 
 export class ActivityController {
@@ -22,6 +22,6 @@ export class ActivityController {
       limit,
     });
 
-    res.status(HTTPStausCodes.OK).json(data);
+    res.status(HTTPStatusCodes.OK).json(data);
   });
 }

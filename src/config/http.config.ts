@@ -1,4 +1,4 @@
-export const HTTPStausCodes = {
+export const HTTPStatusCodes = {
   OK: 200,
   CREATED: 201,
   NO_CONTENT: 204,
