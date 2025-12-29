@@ -1,46 +1,51 @@
 import { UserActionEnum } from "../enums/user-activity.enum";
 import { parseUserAgent } from "./user-agent.util";
 
-export const getActivityMessage = (activity: any): string => {
-  const { action, userAgent, metadata } = activity;
+type MessageContext = "user" | "admin";
+
+export const getActivityMessage = (
+  activity: any,
+  context: MessageContext,
+  userName?: string
+): string => {
+  const { action, userAgent } = activity;
   const { browser, os } = parseUserAgent(userAgent);
 
-  const deviceInfo =
+  const device =
     browser && os
       ? ` from ${browser} on ${os}`
       : browser
       ? ` from ${browser}`
       : "";
 
+  //USER VIEW
+  if (context === "user") {
+    switch (action) {
+      case UserActionEnum.LOGIN:
+        return `You logged in${device}`;
+      case UserActionEnum.FORGOT_PASSWORD:
+        return "You requested a password reset";
+      case UserActionEnum.REGISTER:
+        return "You created your account";
+      case UserActionEnum.RESET_PASSWORD:
+        return "You reset your password";
+      default:
+        return "You performed an action";
+    }
+  }
+
+  //ADMIN VIEW
+  const name = userName ?? "User";
   switch (action) {
-    case UserActionEnum.REGISTER:
-      return "You created your account";
-
     case UserActionEnum.LOGIN:
-      return `You logged in${deviceInfo}`;
-
-    case UserActionEnum.LOGOUT:
-      return "You logged out";
-
+      return `${name} logged in${device}`;
     case UserActionEnum.FORGOT_PASSWORD:
-      return "You requested a password reset";
-
+      return `${name} requested a password reset`;
+    case UserActionEnum.REGISTER:
+      return `${name} created an account`;
     case UserActionEnum.RESET_PASSWORD:
-      return "You reset your password";
-
-    case UserActionEnum.EMAIL_VERIFIED:
-      return "You verified your email address";
-
-    case UserActionEnum.PROFILE_UPDATED:
-      return "You updated your profile";
-
-    case UserActionEnum.APPOINTMENT_CREATED:
-      return "You booked an appointment";
-
-    case UserActionEnum.APPOINTMENT_CANCELLED:
-      return "You cancelled an appointment";
-
+      return `${name} reset their password`;
     default:
-      return "You performed an action";
+      return `${name} performed an action`;
   }
 };

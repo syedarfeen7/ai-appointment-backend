@@ -2,27 +2,27 @@ import { getActivityMessage } from "../../common/utils/activity-message.util";
 import { UserActivity } from "../../database/models/user-activity.model";
 
 interface GetActivitiesInput {
-  userId: string | undefined;
   page: number;
   limit: number;
 }
 
 export class ActivityService {
-  async getUserActivities({ userId, page, limit }: GetActivitiesInput) {
+  async getUserActivities({ page, limit }: GetActivitiesInput) {
     const skip = (page - 1) * limit;
 
     const [activities, total] = await Promise.all([
-      UserActivity.find({ userId })
+      UserActivity.find({})
+        .populate("userId", "name email")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),
-      UserActivity.countDocuments({ userId }),
+      UserActivity.countDocuments({}),
     ]);
 
     return {
-      items: activities?.map((activity) => ({
+      items: activities?.map((activity: any) => ({
         id: activity._id,
-        message: getActivityMessage(activity),
+        message: getActivityMessage(activity, "admin", activity.userId.name),
         createdAt: activity.createdAt,
       })),
       pagination: {
