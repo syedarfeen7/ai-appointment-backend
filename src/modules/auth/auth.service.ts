@@ -132,6 +132,36 @@ export class AuthService {
       html,
     });
   }
+  public async resetPassword(token: string, data: ResetPasswordDTO) {
+    const verification = await VerificationCodeModel.findOne({
+      code: token,
+      type: VerificationEnum.PASSWORD_RESET,
+    });
+
+    if (!verification) {
+      throw new Error(HTTPStausMessages.INVALID_OR_EXPIRED_CODE);
+    }
+
+    if (verification.expiresAt < new Date()) {
+      await verification.deleteOne();
+      throw new Error(HTTPStausMessages.INVALID_OR_EXPIRED_CODE);
+    }
+
+    const user = await User.findById(verification.userId).select("+password");
+    if (!user) {
+      throw new Error(HTTPStausMessages.USER_NOT_FOUND);
+    }
+
+    user.password = data?.password;
+    await user.save();
+
+    await VerificationCodeModel.deleteMany({
+      userId: user._id,
+      type: VerificationEnum.PASSWORD_RESET,
+    });
+
+    await SessionModel.deleteMany({ userId: user._id });
+  }
 
   public async logout(id: string) {
     await SessionModel.deleteOne({ _id: id });

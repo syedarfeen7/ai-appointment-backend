@@ -85,6 +85,30 @@ export class AuthController {
       .json({ message: "Password reset link sent" });
   });
 
+  public resetPassword = asyncHandler(async (req, res) => {
+    const token = req?.query?.token as string;
+    const data = req?.body;
+
+    if (!token) {
+      return res
+        .status(HTTPStausCodes.BAD_REQUEST)
+        .json({ message: "Reset token is required" });
+    }
+
+    const { error } = resetPasswordSchema.validate(data);
+    if (error) {
+      return res
+        .status(HTTPStausCodes.BAD_REQUEST)
+        .json({ message: error.message });
+    }
+
+    await this.authService.resetPassword(token, data);
+
+    return res.status(HTTPStausCodes.OK).json({
+      message: "Password reset successful. Please login again.",
+    });
+  });
+
   public logout = asyncHandler(async (req: Request, res: Response) => {
     const refreshToken = req.cookies?.refreshToken;
 
