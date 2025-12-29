@@ -14,3 +14,11 @@ export const loginSchema = Joi.object({
 })
   .required()
   .unknown(true);
+
+export const resetPasswordSchema = Joi.object({
+  token: Joi.string().required(),
+  password: Joi.string().min(8).required(),
+  confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
+    "any.only": "Passwords do not match",
+  }),
+});

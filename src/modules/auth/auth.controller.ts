@@ -3,6 +3,7 @@ import { asyncHandler } from "../../common/middlewares";
 import { AuthService } from "./auth.service";
 import {
   loginSchema,
+  resetPasswordSchema,
   signupSchema,
 } from "../../common/validators/user.validator";
 import { HTTPStausCodes } from "../../config/http.config";
@@ -20,8 +21,8 @@ export class AuthController {
   }
 
   public signup = asyncHandler(async (req: Request, res: Response) => {
-    const data = req.body;
-    const { error } = signupSchema.validate(req.body);
+    const data = req?.body;
+    const { error } = signupSchema.validate(data);
 
     if (error) {
       return res
@@ -48,7 +49,7 @@ export class AuthController {
   });
 
   public login = asyncHandler(async (req: Request, res: Response) => {
-    const data = req.body;
+    const data = req?.body;
     const userAgent = req.get("User-Agent") || "unknown";
     data.userAgent = userAgent;
     const { error } = loginSchema.validate(data);

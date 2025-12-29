@@ -2,11 +2,7 @@ import { VerificationEnum } from "../../common/enums/verification-code.enum";
 import { forgotPasswordEmailTemplate } from "../../common/template/forgot-password-email";
 import { verificationEmailTemplate } from "../../common/template/verification-email";
 import { timeFromNowInMinutes } from "../../common/utils/date-time.util";
-import {
-  signAccessToken,
-  signPasswordResetToken,
-  signRefreshToken,
-} from "../../common/utils/jwt.util";
+import { signAccessToken, signRefreshToken } from "../../common/utils/jwt.util";
 import { sendMail } from "../../common/utils/mailer.util";
 import { config } from "../../config/env.config";
 import { HTTPStausMessages } from "../../config/http.config";
@@ -14,6 +10,7 @@ import { User } from "../../database";
 import { SessionModel } from "../../database/models/session.model";
 import VerificationCodeModel from "../../database/models/verification.model";
 import { LoginDTO, SignupDTO } from "./dtos";
+import { ResetPasswordDTO } from "./dtos/reset-password.dto";
 
 export class AuthService {
   async signup(data: SignupDTO) {
@@ -118,9 +115,15 @@ export class AuthService {
       throw new Error(HTTPStausMessages.USER_NOT_FOUND);
     }
 
-    const resetToken = signPasswordResetToken({ userId: user._id });
+    const verificationCode = await VerificationCodeModel.create({
+      userId: user?._id,
+      type: VerificationEnum.PASSWORD_RESET,
+      expiresAt: timeFromNowInMinutes(
+        Number(config.JWT.PASSWORD_RESET_EXPIRES_IN)
+      )?.date,
+    });
 
-    const resetLink = `${config.APP_ORIGIN}/reset-password?token=${resetToken}`;
+    const resetLink = `${config.APP_ORIGIN}/reset/password?token=${verificationCode}`;
 
     const html = forgotPasswordEmailTemplate(user.name, resetLink);
     await sendMail({
