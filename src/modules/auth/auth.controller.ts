@@ -69,6 +69,20 @@ export class AuthController {
       accessToken,
     });
   });
+  public forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    if (!email) {
+      return res
+        .status(HTTPStausCodes.BAD_REQUEST)
+        .json({ message: "Email is required" });
+    }
+
+    await this.authService.forgotPassword(email);
+    return res
+      .status(HTTPStausCodes.OK)
+      .json({ message: "Password reset link sent" });
+  });
 
   public logout = asyncHandler(async (req: Request, res: Response) => {
     const refreshToken = req.cookies?.refreshToken;

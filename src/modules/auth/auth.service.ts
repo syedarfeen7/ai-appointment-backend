@@ -1,7 +1,12 @@
 import { VerificationEnum } from "../../common/enums/verification-code.enum";
+import { forgotPasswordEmailTemplate } from "../../common/template/forgot-password-email";
 import { verificationEmailTemplate } from "../../common/template/verification-email";
 import { timeFromNowInMinutes } from "../../common/utils/date-time.util";
-import { signAccessToken, signRefreshToken } from "../../common/utils/jwt.util";
+import {
+  signAccessToken,
+  signPasswordResetToken,
+  signRefreshToken,
+} from "../../common/utils/jwt.util";
 import { sendMail } from "../../common/utils/mailer.util";
 import { config } from "../../config/env.config";
 import { HTTPStausMessages } from "../../config/http.config";
@@ -105,6 +110,24 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  public async forgotPassword(email: string) {
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error(HTTPStausMessages.USER_NOT_FOUND);
+    }
+
+    const resetToken = signPasswordResetToken({ userId: user._id });
+
+    const resetLink = `${config.APP_ORIGIN}/reset-password?token=${resetToken}`;
+
+    const html = forgotPasswordEmailTemplate(user.name, resetLink);
+    await sendMail({
+      to: user.email,
+      subject: "Password Reset",
+      html,
+    });
   }
 
   public async logout(id: string) {
