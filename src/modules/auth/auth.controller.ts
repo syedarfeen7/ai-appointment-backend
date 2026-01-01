@@ -119,6 +119,24 @@ export class AuthController {
     }
 
     clearRefreshTokenCookie(res);
-    return res.status(HTTPStatusCodes.OK).json({ message: "Logout successful" });
+    return res
+      .status(HTTPStatusCodes.OK)
+      .json({ message: "Logout successful" });
+  });
+
+  public refreshToken = asyncHandler(async (req: Request, res: Response) => {
+    const refreshToken = req.cookies?.refreshToken as string;
+
+    if (!refreshToken) {
+      return res
+        .status(HTTPStatusCodes.UNAUTHORIZED)
+        .json({ message: "Refresh token is required" });
+    }
+
+    const { accessToken, newRefreshToken } =
+      await this.authService.refreshToken(refreshToken);
+
+    setRefreshTokenCookie(res, newRefreshToken);
+    return res.status(HTTPStatusCodes.OK).json({ accessToken });
   });
 }

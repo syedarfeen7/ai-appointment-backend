@@ -1,9 +1,14 @@
 import { UserActionEnum } from "../../common/enums/user-activity.enum";
+import { UserRole } from "../../common/enums/user-role.enum";
 import { VerificationEnum } from "../../common/enums/verification-code.enum";
 import { forgotPasswordEmailTemplate } from "../../common/template/forgot-password-email";
 import { verificationEmailTemplate } from "../../common/template/verification-email";
 import { timeFromNowInMinutes } from "../../common/utils/date-time.util";
-import { signAccessToken, signRefreshToken } from "../../common/utils/jwt.util";
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+} from "../../common/utils/jwt.util";
 import { logUserActivity } from "../../common/utils/log-activity.util";
 import { sendMail } from "../../common/utils/mailer.util";
 import { config } from "../../config/env.config";
@@ -197,5 +202,44 @@ export class AuthService {
 
   public async logout(id: string) {
     await SessionModel.deleteOne({ _id: id });
+  }
+
+  public async refreshToken(refreshToken: string) {
+    let payload: { sessionId: string; role: UserRole };
+    try {
+      payload = verifyRefreshToken(refreshToken) as {
+        sessionId: string;
+        role: UserRole;
+      };
+    } catch {
+      throw new Error(HTTPStausMessages.INVALID_TOKEN);
+    }
+
+    const oldSession = await SessionModel.findById(payload.sessionId);
+    if (!oldSession) {
+      throw new Error(HTTPStausMessages.INVALID_TOKEN);
+    }
+
+    await SessionModel.deleteOne({ _id: oldSession._id });
+
+    const newSession = await SessionModel.create({
+      userId: oldSession.userId,
+      userAgent: oldSession.userAgent,
+    });
+
+    const accessToken = signAccessToken({
+      userId: newSession.userId,
+      role: payload.role,
+      sessionId: newSession._id,
+    });
+
+    const newRefreshToken = signRefreshToken({
+      sessionId: newSession._id,
+    });
+
+    return {
+      accessToken,
+      newRefreshToken,
+    };
   }
 }
