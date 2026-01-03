@@ -14,4 +14,12 @@ export class UserController {
     const user = await this.userService.getUserById(userId);
     return res.status(200).json({ user });
   });
+
+  public updateMe = asyncHandler(async (req: Request, res: Response) => {
+    const userId = req?.user?.userId;
+    const updateData = req?.body;
+
+    const user = await this.userService.updateUserById(userId, updateData);
+    return res.status(200).json({ user });
+  });
 }

@@ -5,5 +5,6 @@ import { authMiddleware } from "../../common/middlewares/auth.middleware";
 const router = Router();
 
 router.get("/me", authMiddleware, userController.getMe);
+router.patch("/me", authMiddleware, userController.updateMe);
 
 export default router;
