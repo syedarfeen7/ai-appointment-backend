@@ -1,21 +1,20 @@
-import { UserRole } from "../../common/enums/user-role.enum";
-import { VerificationEnum } from "../../common/enums/verification-code.enum";
-import { forgotPasswordEmailTemplate } from "../../common/template/forgot-password-email";
-import { verificationEmailTemplate } from "../../common/template/verification-email";
-import { timeFromNowInMinutes } from "../../common/utils/date-time.util";
+import { UserRole } from "../../shared/enums/user-role.enum";
+import { VerificationEnum } from "../../shared/enums/verification-code.enum";
+import { forgotPasswordEmailTemplate } from "../../shared/template/forgot-password-email";
+import { verificationEmailTemplate } from "../../shared/template/verification-email";
+import { timeFromNowInMinutes } from "../../shared/utils/date-time.util";
 import {
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
-} from "../../common/utils/jwt.util";
-import { sendMail } from "../../common/utils/mailer.util";
+} from "../../shared/utils/jwt.util";
+import { sendMail } from "../../shared/utils/mailer.util";
 import { config } from "../../config/env.config";
 import { HTTPStausMessages } from "../../config/http.config";
 import { User } from "../../database";
 import { SessionModel } from "../../database/models/session.model";
 import VerificationCodeModel from "../../database/models/verification.model";
-import { LoginDTO, SignupDTO } from "./dtos";
-import { ResetPasswordDTO } from "./dtos/reset-password.dto";
+import { LoginDTO, SignupDTO, ResetPasswordDTO } from "./dtos";
 
 export class AuthService {
   async getUserByEmail(email: string) {

@@ -1,5 +1,5 @@
 import { Schema, model, Types } from "mongoose";
-import { UserActionEnum } from "../../common/enums/user-activity.enum";
+import { UserActionEnum } from "../../shared/enums/user-activity.enum";
 
 const UserActivitySchema = new Schema(
   {

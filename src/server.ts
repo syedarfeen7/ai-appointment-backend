@@ -2,7 +2,7 @@ import express, { Application, Request, Response, NextFunction } from "express";
 import connectDatabase from "./config/database.config";
 import { config } from "./config/env.config";
 import { HTTPStatusCodes } from "./config/http.config";
-import { errorHandler } from "./common/middlewares/errorHandler";
+import { errorHandler } from "./shared/middlewares/errorHandler";
 import authRoutes from "./modules/auth/auth.routes";
 import activityRoutes from "./modules/activity/activity.routes";
 import cookieParser from "cookie-parser";

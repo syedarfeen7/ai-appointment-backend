@@ -1,4 +1,4 @@
-import { getActivityMessage } from "../../common/utils/activity-message.util";
+import { getActivityMessage } from "../../shared/utils/activity-message.util";
 import { UserActivity } from "../../database/models/user-activity.model";
 
 interface GetActivitiesInput {

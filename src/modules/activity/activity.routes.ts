@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { activityController } from ".";
-import { authMiddleware } from "../../common/middlewares/auth.middleware";
-import { roleGuard } from "../../common/middlewares/role.guard";
-import { UserRole } from "../../common/enums/user-role.enum";
+import { authMiddleware } from "../../shared/middlewares/auth.middleware";
+import { roleGuard } from "../../shared/middlewares/role.guard";
+import { UserRole } from "../../shared/enums/user-role.enum";
 
 const router = Router();
 

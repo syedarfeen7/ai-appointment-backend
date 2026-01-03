@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { asyncHandler } from "../../common/middlewares";
+import { asyncHandler } from "../../shared/middlewares";
 import { HTTPStatusCodes } from "../../config/http.config";
 import { ActivityService } from "./activity.service";
 

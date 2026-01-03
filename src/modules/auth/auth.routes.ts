@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authController } from "./index";
-import { forgotPasswordLimiter } from "../../common/middlewares/rateLimit";
+import { forgotPasswordLimiter } from "../../shared/middlewares/rateLimit";
 
 const router = Router();
 

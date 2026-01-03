@@ -1,19 +1,19 @@
 import { Request, Response } from "express";
-import { asyncHandler } from "../../common/middlewares";
+import { asyncHandler } from "../../shared/middlewares";
 import { AuthService } from "./auth.service";
 import {
   loginSchema,
   resetPasswordSchema,
   signupSchema,
-} from "../../common/validators/user.validator";
+} from "../../shared/validators/user.validator";
 import { HTTPStatusCodes } from "../../config/http.config";
 import {
   clearRefreshTokenCookie,
   setRefreshTokenCookie,
-} from "../../common/utils/cookie.util";
-import { verifyRefreshToken } from "../../common/utils/jwt.util";
-import { logUserActivity } from "../../common/utils/log-activity.util";
-import { UserActionEnum } from "../../common/enums/user-activity.enum";
+} from "../../shared/utils/cookie.util";
+import { verifyRefreshToken } from "../../shared/utils/jwt.util";
+import { logUserActivity } from "../../shared/utils/log-activity.util";
+import { UserActionEnum } from "../../shared/enums/user-activity.enum";
 
 export class AuthController {
   private authService: AuthService;

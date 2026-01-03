@@ -1,4 +1,4 @@
-import { asyncHandler } from "../../common/middlewares";
+import { asyncHandler } from "../../shared/middlewares";
 import { UserService } from "./user.service";
 import { Request, Response } from "express";
 
