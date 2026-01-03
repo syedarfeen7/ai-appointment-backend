@@ -8,12 +8,10 @@ export const signupSchema = Joi.object({
   .required()
   .unknown(true);
 export const loginSchema = Joi.object({
-  email: Joi.string().email().required(),
+  identifier: Joi.string().required(),
   password: Joi.string().required(),
   userAgent: Joi.string().optional(),
-})
-  .required()
-  .unknown(true);
+});
 
 export const resetPasswordSchema = Joi.object({
   password: Joi.string().min(8).required(),

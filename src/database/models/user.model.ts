@@ -6,6 +6,7 @@ import { UserRole } from "../../shared/enums/user-role.enum";
 export interface IUser extends Document {
   name: string;
   email: string;
+  phoneNumber: string;
   password: string;
   role: UserRole;
   isEmailVerified: boolean;
@@ -25,6 +26,11 @@ const userSchema = new Schema<IUser>(
       required: true,
       unique: true,
       lowercase: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
       type: String,

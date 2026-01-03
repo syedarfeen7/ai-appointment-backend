@@ -15,6 +15,7 @@ import { User } from "../../database";
 import { SessionModel } from "../../database/models/session.model";
 import VerificationCodeModel from "../../database/models/verification.model";
 import { LoginDTO, SignupDTO, ResetPasswordDTO } from "./dtos";
+import { parseIdentifier } from "../../shared/utils/identifier.util";
 
 export class AuthService {
   async getUserByEmail(email: string) {
@@ -25,7 +26,7 @@ export class AuthService {
     return user;
   }
   async signup(data: SignupDTO) {
-    const { name, email, password, role } = data;
+    const { name, email, password, role, phoneNumber } = data;
 
     const existing = await User.findOne({ email });
     if (existing) throw new Error(HTTPStausMessages.ALREADY_EXISTS);
@@ -35,6 +36,7 @@ export class AuthService {
       email,
       password,
       role,
+      phoneNumber,
     });
 
     const verificationCode = await VerificationCodeModel.create({
@@ -88,9 +90,11 @@ export class AuthService {
   }
 
   async login(data: LoginDTO) {
-    const { email, password, userAgent } = data;
+    const { identifier, password, userAgent } = data;
 
-    const user = await User.findOne({ email }).select("+password");
+    const query = parseIdentifier(identifier);
+
+    const user = await User.findOne(query).select("+password");
     if (!user) {
       throw new Error(HTTPStausMessages.INVALID_CREDENTIALS);
     }
