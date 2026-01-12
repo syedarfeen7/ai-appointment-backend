@@ -12,10 +12,13 @@ export class DoctorController {
   }
 
   completeProfile = asyncHandler(async (req: Request, res: Response) => {
-    const { error, value } = doctorProfileSchema.validate(req.body, {
-      abortEarly: false,
-      stripUnknown: true,
-    });
+    const { error } = doctorProfileSchema.validate(
+      { ...req.body, specialties: JSON.parse(req.body.specialties) },
+      {
+        abortEarly: false,
+        stripUnknown: true,
+      }
+    );
 
     if (error) {
       return res.status(HTTPStatusCodes.BAD_REQUEST).json({
@@ -23,9 +26,15 @@ export class DoctorController {
         errors: error.details.map((d: any) => d?.message),
       });
     }
+
+    const body = {
+      ...req.body,
+      specialties: JSON.parse(req.body.specialties),
+      profilePicture: req.file ? `/uploads/${req.file.filename}` : undefined,
+    };
     const profile = await this.doctorService.createOrUpdateProfile(
       req.user!.userId,
-      req.body
+      body
     );
 
     res.status(200).json({
