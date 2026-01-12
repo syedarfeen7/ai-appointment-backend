@@ -1,5 +1,5 @@
 import { DoctorProfile } from "../../database/models/doctor.model";
-import { DoctorProfileDTO } from "./dtos/ddoctor-profile.dto";
+import { DoctorProfileDTO } from "./dtos/doctor-profile.dto";
 
 export class DoctorService {
   async createOrUpdateProfile(userId: string, data: DoctorProfileDTO) {
