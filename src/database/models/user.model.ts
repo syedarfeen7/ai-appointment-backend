@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import { compareValue } from "../../shared/utils/bcrypt.util";
+import { compareValue } from "../../shared/utils/auth/bcrypt.util";
 import { UserRole } from "../../shared/enums/user-role.enum";
 
 export interface IUser extends Document {

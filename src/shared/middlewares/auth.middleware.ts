@@ -1,5 +1,5 @@
 import { Response, NextFunction, Request } from "express";
-import { verifyAccessToken } from "../utils/jwt.util";
+import { verifyAccessToken } from "../utils/auth/jwt.util";
 import { SessionModel } from "../../database/models/session.model";
 import { HTTPStatusCodes } from "../../config/http.config";
 import { UserRole } from "../enums/user-role.enum";

@@ -1,5 +1,5 @@
 import jwt, { SignOptions, Secret } from "jsonwebtoken";
-import { config } from "../../config/env.config";
+import { config } from "../../../config/env.config";
 
 const accessSecret: Secret = config.JWT.ACCESS_SECRET;
 const refreshSecret: Secret = config.JWT.REFRESH_SECRET;

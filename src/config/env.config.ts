@@ -1,4 +1,4 @@
-import { getEnv, getEnvNumber } from "../shared/utils/get-env.util";
+import { getEnv, getEnvNumber } from "../shared/utils/common/get-env.util";
 import { validateEnv } from "../shared/validators/env.validator";
 
 validateEnv(); // validate environment variables at startup

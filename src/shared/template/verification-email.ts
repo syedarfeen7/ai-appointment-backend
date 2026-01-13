@@ -1,5 +1,5 @@
 import { config } from "../../config/env.config";
-import { timeFromNowInMinutes } from "../utils/date-time.util";
+import { timeFromNowInMinutes } from "../utils/common/date-time.util";
 
 export const verificationEmailTemplate = (
   name: string,

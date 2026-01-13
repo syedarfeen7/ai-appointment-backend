@@ -1,5 +1,5 @@
-import { UserActionEnum } from "../enums/user-activity.enum";
-import { parseUserAgent } from "./user-agent.util";
+import { UserActionEnum } from "../../enums/user-activity.enum";
+import { parseUserAgent } from "../user/user-agent.util";
 
 type MessageContext = "user" | "admin";
 

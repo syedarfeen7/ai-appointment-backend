@@ -2,20 +2,20 @@ import { UserRole } from "../../shared/enums/user-role.enum";
 import { VerificationEnum } from "../../shared/enums/verification-code.enum";
 import { forgotPasswordEmailTemplate } from "../../shared/template/forgot-password-email";
 import { verificationEmailTemplate } from "../../shared/template/verification-email";
-import { timeFromNowInMinutes } from "../../shared/utils/date-time.util";
+import { timeFromNowInMinutes } from "../../shared/utils/common/date-time.util";
 import {
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
-} from "../../shared/utils/jwt.util";
-import { sendMail } from "../../shared/utils/mailer.util";
+} from "../../shared/utils/auth/jwt.util";
+import { sendMail } from "../../shared/utils/communication/mailer.util";
 import { config } from "../../config/env.config";
 import { HTTPStausMessages } from "../../config/http.config";
 import { User } from "../../database";
 import { SessionModel } from "../../database/models/session.model";
 import VerificationCodeModel from "../../database/models/verification.model";
 import { LoginDTO, SignupDTO, ResetPasswordDTO } from "./dtos";
-import { parseIdentifier } from "../../shared/utils/identifier.util";
+import { parseIdentifier } from "../../shared/utils/auth/identifier.util";
 
 export class AuthService {
   async getUserByEmail(email: string) {

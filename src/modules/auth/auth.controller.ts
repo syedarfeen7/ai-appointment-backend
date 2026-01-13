@@ -10,9 +10,9 @@ import { HTTPStatusCodes } from "../../config/http.config";
 import {
   clearRefreshTokenCookie,
   setRefreshTokenCookie,
-} from "../../shared/utils/cookie.util";
-import { verifyRefreshToken } from "../../shared/utils/jwt.util";
-import { logUserActivity } from "../../shared/utils/log-activity.util";
+} from "../../shared/utils/auth/cookie.util";
+import { verifyRefreshToken } from "../../shared/utils/auth/jwt.util";
+import { logUserActivity } from "../../shared/utils/activity/log-activity.util";
 import { UserActionEnum } from "../../shared/enums/user-activity.enum";
 
 export class AuthController {

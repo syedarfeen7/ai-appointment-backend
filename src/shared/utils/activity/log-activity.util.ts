@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { UserActivity } from "../../database/models/user-activity.model";
-import { UserActionEnum } from "../enums/user-activity.enum";
+import { UserActivity } from "../../../database/models/user-activity.model";
+import { UserActionEnum } from "../../enums/user-activity.enum";
 
 export const logUserActivity = async ({
   userId,

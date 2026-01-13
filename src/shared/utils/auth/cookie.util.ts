@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { config } from "../../config/env.config";
+import { config } from "../../../config/env.config";
 
 const isProd = config.NODE_ENV === "production";
 
