@@ -26,13 +26,14 @@ export class AuthService {
     return user;
   }
   async signup(data: SignupDTO) {
-    const { name, email, password, role, phoneNumber } = data;
+    const { firstName, lastName, email, password, role, phoneNumber } = data;
 
     const existing = await User.findOne({ email });
     if (existing) throw new Error(HTTPStausMessages.ALREADY_EXISTS);
 
     const user = await User.create({
-      name,
+      firstName,
+      lastName,
       email,
       password,
       role,
@@ -43,13 +44,16 @@ export class AuthService {
       userId: user?._id,
       type: VerificationEnum.EMAIL_VERIFICATION,
       expiresAt: timeFromNowInMinutes(
-        Number(config.MAILER.ACCOUNT_VERIFICATION_EXPIRES_IN_MINUTES)
+        Number(config.MAILER.ACCOUNT_VERIFICATION_EXPIRES_IN_MINUTES),
       )?.date,
     });
 
     const verificationLink = `${config.APP_ORIGIN}/auth/verify/email?code=${verificationCode?.code}`;
 
-    const html = verificationEmailTemplate(name, verificationLink);
+    const html = verificationEmailTemplate(
+      `${user.firstName} ${user.lastName}`,
+      verificationLink,
+    );
 
     await sendMail({
       to: user?.email,
@@ -136,13 +140,16 @@ export class AuthService {
       userId: user?._id,
       type: VerificationEnum.PASSWORD_RESET,
       expiresAt: timeFromNowInMinutes(
-        Number(config.JWT.PASSWORD_RESET_EXPIRES_IN)
+        Number(config.JWT.PASSWORD_RESET_EXPIRES_IN),
       )?.date,
     });
 
     const resetLink = `${config.APP_ORIGIN}/reset/password?token=${code}`;
 
-    const html = forgotPasswordEmailTemplate(user.name, resetLink);
+    const html = forgotPasswordEmailTemplate(
+      `${user.firstName} ${user.lastName}`,
+      resetLink,
+    );
     await sendMail({
       to: user.email,
       subject: "Password Reset",

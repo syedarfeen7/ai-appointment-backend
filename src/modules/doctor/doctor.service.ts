@@ -14,7 +14,7 @@ export class DoctorService {
         new: true,
         upsert: true,
         runValidators: true,
-      }
+      },
     );
 
     return profile;
@@ -22,7 +22,7 @@ export class DoctorService {
 
   async getMyProfile(userId: string) {
     const user = await User.findById(userId).select(
-      "name email phoneNumber role"
+      "firstName lastName email phoneNumber role",
     );
 
     if (!user) return null;

@@ -12,7 +12,7 @@ export class ActivityService {
 
     const [activities, total] = await Promise.all([
       UserActivity.find({})
-        .populate("userId", "name email")
+        .populate("userId", "firstName lastName email")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),
@@ -22,7 +22,11 @@ export class ActivityService {
     return {
       items: activities?.map((activity: any) => ({
         id: activity._id,
-        message: getActivityMessage(activity, "admin", activity.userId.name),
+        message: getActivityMessage(
+          activity,
+          "admin",
+          `${activity.userId.firstName} ${activity.userId.lastName}`,
+        ),
         createdAt: activity.createdAt,
       })),
       pagination: {
@@ -36,13 +40,13 @@ export class ActivityService {
 
   async getUserActivities(
     userId: string | undefined,
-    { page, limit }: GetActivitiesInput
+    { page, limit }: GetActivitiesInput,
   ) {
     const skip = (page - 1) * limit;
 
     const [activities, total] = await Promise.all([
       UserActivity.find({ userId })
-        .populate("userId", "name email")
+        .populate("userId", "firstName lastName email")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),
@@ -52,7 +56,11 @@ export class ActivityService {
     return {
       items: activities?.map((activity: any) => ({
         id: activity._id,
-        message: getActivityMessage(activity, "user", activity.userId.name),
+        message: getActivityMessage(
+          activity,
+          "user",
+          `${activity.userId.firstName} ${activity.userId.lastName}`,
+        ),
         createdAt: activity.createdAt,
       })),
       pagination: {

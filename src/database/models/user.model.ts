@@ -4,7 +4,8 @@ import { compareValue } from "../../shared/utils/auth/bcrypt.util";
 import { UserRole } from "../../shared/enums/user-role.enum";
 
 export interface IUser extends Document {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
   password: string;
@@ -16,7 +17,12 @@ export interface IUser extends Document {
 
 const userSchema = new Schema<IUser>(
   {
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+      minlength: 3,
+    },
+    lastName: {
       type: String,
       required: true,
       minlength: 3,
@@ -29,7 +35,7 @@ const userSchema = new Schema<IUser>(
     },
     phoneNumber: {
       type: String,
-      required: true,
+      required: false,
       unique: true,
     },
     password: {
@@ -48,7 +54,7 @@ const userSchema = new Schema<IUser>(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.pre<IUser>("save", async function () {

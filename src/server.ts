@@ -6,10 +6,17 @@ import { errorHandler } from "./shared/middlewares/errorHandler";
 import routes from "./index";
 import cookieParser from "cookie-parser";
 import path from "path";
+import cors from "cors";
 
 const app: Application = express();
 const BASE_PATH = config.BASE_PATH;
 
+app.use(
+  cors({
+    origin: config.APP_ORIGIN,
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
