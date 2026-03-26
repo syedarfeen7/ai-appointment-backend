@@ -3,6 +3,7 @@ import { HTTPStatusCodes } from "../../config/http.config";
 
 interface ErrorWithStatus extends Error {
   statusCode?: number;
+  code?: number | string;
 }
 
 export const errorHandler = (
@@ -13,7 +14,10 @@ export const errorHandler = (
 ) => {
   console.error(err); // You can replace with logger like Winston in production
 
-  const statusCode = err.statusCode || HTTPStatusCodes.INTERNAL_SERVER_ERROR;
+  const statusCode =
+    err.statusCode ||
+    (err.code === 11000 ? HTTPStatusCodes.CONFLICT : undefined) ||
+    HTTPStatusCodes.INTERNAL_SERVER_ERROR;
   const message = err.message || "Internal Server Error";
 
   res.status(statusCode).json({

@@ -10,18 +10,22 @@ import {
 } from "../../shared/utils/auth/jwt.util";
 import { sendMail } from "../../shared/utils/communication/mailer.util";
 import { config } from "../../config/env.config";
-import { HTTPStausMessages } from "../../config/http.config";
+import { HTTPStausMessages, HTTPStatusCodes } from "../../config/http.config";
 import { User } from "../../database";
 import { SessionModel } from "../../database/models/session.model";
 import VerificationCodeModel from "../../database/models/verification.model";
 import { LoginDTO, SignupDTO, ResetPasswordDTO } from "./dtos";
 import { parseIdentifier } from "../../shared/utils/auth/identifier.util";
+import { AppError } from "../../shared/errors/app-error";
 
 export class AuthService {
   async getUserByEmail(email: string) {
     const user = await User.findOne({ email });
     if (!user) {
-      throw new Error(HTTPStausMessages.USER_NOT_FOUND);
+      throw new AppError(
+        HTTPStausMessages.USER_NOT_FOUND,
+        HTTPStatusCodes.NOT_FOUND
+      );
     }
     return user;
   }
@@ -29,7 +33,12 @@ export class AuthService {
     const { firstName, lastName, email, password, role, phoneNumber } = data;
 
     const existing = await User.findOne({ email });
-    if (existing) throw new Error(HTTPStausMessages.ALREADY_EXISTS);
+    if (existing) {
+      throw new AppError(
+        HTTPStausMessages.ALREADY_EXISTS,
+        HTTPStatusCodes.CONFLICT
+      );
+    }
 
     const user = await User.create({
       firstName,
@@ -69,16 +78,25 @@ export class AuthService {
       type: VerificationEnum.EMAIL_VERIFICATION,
     }).select("+expiresAt +userId");
     if (!verificationRecord) {
-      throw new Error(HTTPStausMessages.INVALID_OR_EXPIRED_CODE);
+      throw new AppError(
+        HTTPStausMessages.INVALID_OR_EXPIRED_CODE,
+        HTTPStatusCodes.BAD_REQUEST
+      );
     }
 
     if (verificationRecord.expiresAt < new Date()) {
-      throw new Error(HTTPStausMessages.INVALID_OR_EXPIRED_CODE);
+      throw new AppError(
+        HTTPStausMessages.INVALID_OR_EXPIRED_CODE,
+        HTTPStatusCodes.BAD_REQUEST
+      );
     }
 
     const user = await User.findById(verificationRecord.userId);
     if (!user) {
-      throw new Error(HTTPStausMessages.USER_NOT_FOUND);
+      throw new AppError(
+        HTTPStausMessages.USER_NOT_FOUND,
+        HTTPStatusCodes.NOT_FOUND
+      );
     }
 
     if (!user.isEmailVerified) {
@@ -100,12 +118,18 @@ export class AuthService {
 
     const user = await User.findOne(query).select("+password");
     if (!user) {
-      throw new Error(HTTPStausMessages.INVALID_CREDENTIALS);
+      throw new AppError(
+        HTTPStausMessages.INVALID_CREDENTIALS,
+        HTTPStatusCodes.UNAUTHORIZED
+      );
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      throw new Error(HTTPStausMessages.INVALID_CREDENTIALS);
+      throw new AppError(
+        HTTPStausMessages.INVALID_CREDENTIALS,
+        HTTPStatusCodes.UNAUTHORIZED
+      );
     }
 
     const session = await SessionModel.create({
@@ -133,7 +157,10 @@ export class AuthService {
   public async forgotPassword(email: string) {
     const user = await User.findOne({ email });
     if (!user) {
-      throw new Error(HTTPStausMessages.USER_NOT_FOUND);
+      throw new AppError(
+        HTTPStausMessages.USER_NOT_FOUND,
+        HTTPStatusCodes.NOT_FOUND
+      );
     }
 
     const { code } = await VerificationCodeModel.create({
@@ -163,17 +190,26 @@ export class AuthService {
     });
 
     if (!verification) {
-      throw new Error(HTTPStausMessages.INVALID_OR_EXPIRED_CODE);
+      throw new AppError(
+        HTTPStausMessages.INVALID_OR_EXPIRED_CODE,
+        HTTPStatusCodes.BAD_REQUEST
+      );
     }
 
     if (verification.expiresAt < new Date()) {
       await verification.deleteOne();
-      throw new Error(HTTPStausMessages.INVALID_OR_EXPIRED_CODE);
+      throw new AppError(
+        HTTPStausMessages.INVALID_OR_EXPIRED_CODE,
+        HTTPStatusCodes.BAD_REQUEST
+      );
     }
 
     const user = await User.findById(verification.userId).select("+password");
     if (!user) {
-      throw new Error(HTTPStausMessages.USER_NOT_FOUND);
+      throw new AppError(
+        HTTPStausMessages.USER_NOT_FOUND,
+        HTTPStatusCodes.NOT_FOUND
+      );
     }
 
     user.password = data?.password;
@@ -198,12 +234,18 @@ export class AuthService {
         sessionId: string;
       };
     } catch {
-      throw new Error(HTTPStausMessages.INVALID_TOKEN);
+      throw new AppError(
+        HTTPStausMessages.INVALID_TOKEN,
+        HTTPStatusCodes.UNAUTHORIZED
+      );
     }
 
     const oldSession = await SessionModel.findById(payload.sessionId);
     if (!oldSession) {
-      throw new Error(HTTPStausMessages.INVALID_TOKEN);
+      throw new AppError(
+        HTTPStausMessages.INVALID_TOKEN,
+        HTTPStatusCodes.UNAUTHORIZED
+      );
     }
 
     await SessionModel.deleteOne({ _id: oldSession._id });
@@ -214,7 +256,12 @@ export class AuthService {
     });
 
     const user = await User.findById(oldSession.userId).select("role");
-    if (!user) throw new Error(HTTPStausMessages.USER_NOT_FOUND);
+    if (!user) {
+      throw new AppError(
+        HTTPStausMessages.USER_NOT_FOUND,
+        HTTPStatusCodes.NOT_FOUND
+      );
+    }
 
     const accessToken = signAccessToken({
       userId: newSession.userId,
