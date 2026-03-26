@@ -57,7 +57,7 @@ export class AuthService {
       )?.date,
     });
 
-    const verificationLink = `${config.APP_ORIGIN}/auth/verify/email?code=${verificationCode?.code}`;
+    const verificationLink = `${config.APP_ORIGIN}/account-verification?token=${verificationCode?.code}`;
 
     const html = verificationEmailTemplate(
       `${user.firstName} ${user.lastName}`,

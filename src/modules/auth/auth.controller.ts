@@ -43,14 +43,14 @@ export class AuthController {
   });
 
   public verifyEmail = asyncHandler(async (req: Request, res: Response) => {
-    const { code } = req.query;
-    if (!code || typeof code !== "string") {
+    const { token } = req.body;
+    if (!token || typeof token !== "string") {
       return res
         .status(HTTPStatusCodes.BAD_REQUEST)
-        .json({ message: "Verification code is required" });
+        .json({ message: "Verification token is required" });
     }
 
-    await this.authService.verifyEmail(code);
+    await this.authService.verifyEmail(token);
     return res
       .status(HTTPStatusCodes.OK)
       .json({ message: "Email verified successfully" });
@@ -67,9 +67,8 @@ export class AuthController {
         .status(HTTPStatusCodes.BAD_REQUEST)
         .json({ message: error.message });
     }
-    const { user, accessToken, refreshToken } = await this.authService.login(
-      data
-    );
+    const { user, accessToken, refreshToken } =
+      await this.authService.login(data);
     await logUserActivity({
       userId: user._id,
       action: UserActionEnum.LOGIN,

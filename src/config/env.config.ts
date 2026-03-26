@@ -5,7 +5,7 @@ validateEnv(); // validate environment variables at startup
 
 export const config = {
   NODE_ENV: getEnv("NODE_ENV", "development"),
-  APP_ORIGIN: getEnv("APP_ORIGIN", "http://localhost:8081/api/v1"),
+  APP_ORIGIN: getEnv("APP_ORIGIN", "http://localhost:3001"),
   PORT: getEnvNumber("PORT", 5000),
   BASE_PATH: getEnv("BASE_PATH", "/api/v1"),
   MONGO_URI: getEnv("MONGO_URI"),
