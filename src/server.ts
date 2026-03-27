@@ -31,8 +31,6 @@ app.get("/health", (req: Request, res: Response) => {
 
 app.use(errorHandler);
 
-console.log(config.APP_ORIGIN);
-
 const startServer = async () => {
   try {
     await connectDatabase();

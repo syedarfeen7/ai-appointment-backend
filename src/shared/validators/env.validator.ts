@@ -16,6 +16,10 @@ const envSchema = Joi.object({
   JWT_REFRESH_SECRET: Joi.string().required(),
   JWT_REFRESH_EXPIRES_IN: Joi.string().required(),
   PASSWORD_RESET_EXPIRES_IN: Joi.string().required(),
+  COOKIE_SECURE: Joi.boolean().optional(),
+  COOKIE_SAME_SITE: Joi.string()
+    .valid("lax", "strict", "none", "Lax", "Strict", "None")
+    .optional(),
   MAILER_SENDER: Joi.string().required(),
 }).unknown(true);
 

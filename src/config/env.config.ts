@@ -16,6 +16,10 @@ export const config = {
     REFRESH_EXPIRES_IN: getEnv("JWT_REFRESH_EXPIRES_IN", "30d"),
     PASSWORD_RESET_EXPIRES_IN: getEnvNumber("PASSWORD_RESET_EXPIRES_IN", 15),
   },
+  COOKIE: {
+    SECURE: getEnv("COOKIE_SECURE", "true") === "true",
+    SAME_SITE: getEnv("COOKIE_SAME_SITE", "none"),
+  },
   MAILER: {
     HOST: getEnv("SMTP_HOST"),
     PORT: getEnvNumber("SMTP_PORT", 465),
