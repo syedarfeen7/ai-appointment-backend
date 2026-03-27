@@ -25,4 +25,7 @@ export const HTTPStausMessages = {
   USER_NOT_FOUND: "User not found",
   INVALID_CREDENTIALS: "Invalid credentials",
   INVALID_TOKEN: "Invalid token",
+  ACCOUNT_NOT_VERIFIED:
+    "Oops! Your account is not verified yet. Please check your email for the verification link.",
+  EMAIL_NOT_VERIFIED: "Email not verified",
 } as const;

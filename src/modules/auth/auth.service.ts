@@ -124,6 +124,13 @@ export class AuthService {
       );
     }
 
+    if (!user.isEmailVerified) {
+      throw new AppError(
+        HTTPStausMessages.ACCOUNT_NOT_VERIFIED,
+        HTTPStatusCodes.UNAUTHORIZED,
+      );
+    }
+
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       throw new AppError(
