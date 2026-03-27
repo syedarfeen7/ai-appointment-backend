@@ -23,6 +23,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/nodemailer": "^7.0.4",
+    "@types/node": "^25.5.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -46,7 +47,6 @@
   },
   "description": "",
   "devDependencies": {
-    "@types/node": "^25.5.0",
     "ts-node-dev": "^2.0.0"
   }
 }
