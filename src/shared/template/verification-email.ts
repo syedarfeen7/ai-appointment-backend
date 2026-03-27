@@ -38,7 +38,7 @@ export const verificationEmailTemplate = (
 
       <tr>
         <td style="background: #f4f4f7; padding: 20px; text-align: center; font-size: 12px; color: #999;">
-          © ${new Date().getFullYear()} Your Company.
+          © ${new Date().getFullYear()} MedAI.
         </td>
       </tr>
     </table>

@@ -74,7 +74,7 @@ export const forgotPasswordEmailTemplate = (
             color: #999;
           "
         >
-          © ${new Date().getFullYear()} Your Company. All rights reserved.
+          © ${new Date().getFullYear()} MedAI. All rights reserved.
         </td>
       </tr>
     </table>

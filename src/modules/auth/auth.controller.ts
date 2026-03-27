@@ -122,9 +122,9 @@ export class AuthController {
         .json({ message: error.message });
     }
 
-    await this.authService.resetPassword(token, data);
+    const { email } = await this.authService.resetPassword(token, data);
 
-    const user = await this.authService["getUserByEmail"](data?.email);
+    const user = await this.authService["getUserByEmail"](email);
 
     await logUserActivity({
       userId: user._id,

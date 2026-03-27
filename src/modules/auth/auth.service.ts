@@ -24,7 +24,7 @@ export class AuthService {
     if (!user) {
       throw new AppError(
         HTTPStausMessages.USER_NOT_FOUND,
-        HTTPStatusCodes.NOT_FOUND
+        HTTPStatusCodes.NOT_FOUND,
       );
     }
     return user;
@@ -36,7 +36,7 @@ export class AuthService {
     if (existing) {
       throw new AppError(
         HTTPStausMessages.ALREADY_EXISTS,
-        HTTPStatusCodes.CONFLICT
+        HTTPStatusCodes.CONFLICT,
       );
     }
 
@@ -80,14 +80,14 @@ export class AuthService {
     if (!verificationRecord) {
       throw new AppError(
         HTTPStausMessages.INVALID_OR_EXPIRED_CODE,
-        HTTPStatusCodes.BAD_REQUEST
+        HTTPStatusCodes.BAD_REQUEST,
       );
     }
 
     if (verificationRecord.expiresAt < new Date()) {
       throw new AppError(
         HTTPStausMessages.INVALID_OR_EXPIRED_CODE,
-        HTTPStatusCodes.BAD_REQUEST
+        HTTPStatusCodes.BAD_REQUEST,
       );
     }
 
@@ -95,7 +95,7 @@ export class AuthService {
     if (!user) {
       throw new AppError(
         HTTPStausMessages.USER_NOT_FOUND,
-        HTTPStatusCodes.NOT_FOUND
+        HTTPStatusCodes.NOT_FOUND,
       );
     }
 
@@ -120,7 +120,7 @@ export class AuthService {
     if (!user) {
       throw new AppError(
         HTTPStausMessages.INVALID_CREDENTIALS,
-        HTTPStatusCodes.UNAUTHORIZED
+        HTTPStatusCodes.UNAUTHORIZED,
       );
     }
 
@@ -128,7 +128,7 @@ export class AuthService {
     if (!isMatch) {
       throw new AppError(
         HTTPStausMessages.INVALID_CREDENTIALS,
-        HTTPStatusCodes.UNAUTHORIZED
+        HTTPStatusCodes.UNAUTHORIZED,
       );
     }
 
@@ -159,7 +159,7 @@ export class AuthService {
     if (!user) {
       throw new AppError(
         HTTPStausMessages.USER_NOT_FOUND,
-        HTTPStatusCodes.NOT_FOUND
+        HTTPStatusCodes.NOT_FOUND,
       );
     }
 
@@ -192,7 +192,7 @@ export class AuthService {
     if (!verification) {
       throw new AppError(
         HTTPStausMessages.INVALID_OR_EXPIRED_CODE,
-        HTTPStatusCodes.BAD_REQUEST
+        HTTPStatusCodes.BAD_REQUEST,
       );
     }
 
@@ -200,7 +200,7 @@ export class AuthService {
       await verification.deleteOne();
       throw new AppError(
         HTTPStausMessages.INVALID_OR_EXPIRED_CODE,
-        HTTPStatusCodes.BAD_REQUEST
+        HTTPStatusCodes.BAD_REQUEST,
       );
     }
 
@@ -208,7 +208,7 @@ export class AuthService {
     if (!user) {
       throw new AppError(
         HTTPStausMessages.USER_NOT_FOUND,
-        HTTPStatusCodes.NOT_FOUND
+        HTTPStatusCodes.NOT_FOUND,
       );
     }
 
@@ -221,6 +221,9 @@ export class AuthService {
     });
 
     await SessionModel.deleteMany({ userId: user._id });
+    return {
+      email: user.email,
+    };
   }
 
   public async logout(id: string) {
@@ -236,7 +239,7 @@ export class AuthService {
     } catch {
       throw new AppError(
         HTTPStausMessages.INVALID_TOKEN,
-        HTTPStatusCodes.UNAUTHORIZED
+        HTTPStatusCodes.UNAUTHORIZED,
       );
     }
 
@@ -244,7 +247,7 @@ export class AuthService {
     if (!oldSession) {
       throw new AppError(
         HTTPStausMessages.INVALID_TOKEN,
-        HTTPStatusCodes.UNAUTHORIZED
+        HTTPStatusCodes.UNAUTHORIZED,
       );
     }
 
@@ -259,7 +262,7 @@ export class AuthService {
     if (!user) {
       throw new AppError(
         HTTPStausMessages.USER_NOT_FOUND,
-        HTTPStatusCodes.NOT_FOUND
+        HTTPStatusCodes.NOT_FOUND,
       );
     }
 
