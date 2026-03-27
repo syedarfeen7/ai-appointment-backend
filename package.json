@@ -7,7 +7,7 @@
     "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "debug": "node --inspect-brk -r ts-node/register src/server.ts",
-    "render-build": "npm install --include=dev && npm run build"
+    "render-build": "npm run build"
   },
   "engines": {
     "node": "20.x"
@@ -16,6 +16,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.10.1",
+    "@types/nodemailer": "^7.0.4",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -34,19 +42,11 @@
     "path": "^0.12.7",
     "qrcode": "^1.5.4",
     "speakeasy": "^2.0.0",
+    "typescript": "^5.9.3",
     "ua-parser-js": "^2.0.7"
   },
   "description": "",
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
-    "@types/cookie-parser": "^1.4.10",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/multer": "^2.0.0",
-    "@types/node": "^24.10.1",
-    "@types/nodemailer": "^7.0.4",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.3"
+    "ts-node-dev": "^2.0.0"
   }
 }
