@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "debug": "node --inspect-brk -r ts-node/register src/server.ts",
+    "debug": "ts-node-dev --respawn --transpile-only --inspect=9229 src/server.ts",
     "render-build": "npm run build"
   },
   "engines": {
